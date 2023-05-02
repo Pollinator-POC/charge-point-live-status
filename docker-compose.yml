@@ -201,7 +201,7 @@ services:
       BOOTSTRAP_SERVERS: "broker:29092"
       DELAY_START_SECONDS: "120"
       MESSAGE_DELAY: "1"
-      DATA_FILE: "data/1683026053.json"
+      DATA_FILE: "data/1683036538.json"
   consumer:
     build: consumer/.
     container_name: consumer
@@ -235,6 +235,7 @@ services:
       - "8080:8080"
   consumer-notebook:
     image: jupyter/scipy-notebook:2023-02-28
+    container_name: consumer-notebook
     ports:
       - "8888:8888"
       - "8050:8050"
