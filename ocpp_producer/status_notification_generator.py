@@ -51,7 +51,7 @@ class GenerateStatusNotifications:
         num_chargers = 10
         collect = []
         for n in range(num_chargers):
-           charge_point_id = uuid.uuid4()
+           charge_point_id = n + 1
            collect = collect + [ self.decorate(charge_point_id, x) for x in self.pulse("2023-01-01T09:00:00+00:00", "2023-01-01T18:00:00+00:00") ]
         df = pd.DataFrame(collect)
         df["timestamp_new"] = to_datetime(df["timestamp"])
