@@ -187,6 +187,7 @@ services:
       
       echo -e 'Creating kafka topics'
       kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic StatusNotificationRequest --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server broker:29092 --create --if-not-exists --topic HeartbeatRequest --replication-factor 1 --partitions 1
       
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server broker:29092 --list

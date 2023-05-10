@@ -42,9 +42,12 @@ class GenerateStatusNotifications:
         return {
             "charge_point_id": str(charge_point_id),
             "action": "StatusNotification",
+            "message_id": uuid.uuid4(),
             "message_type": 2,
             "body": json.dumps(data),
-            "timestamp": data["timestamp"] # => only for sorting later on (it's actually removed later)
+            "timestamp": data["timestamp"], # => only for sorting later on (it's actually removed later)
+            "write_timestamp": data["timestamp"],
+            "write_timestamp_epoch": int(parser.parse(data["timestamp"]).timestamp())
         }
 
     def generate(self):
