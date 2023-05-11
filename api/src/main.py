@@ -4,10 +4,17 @@ import os
 import boto3
 import uvicorn
 from fastapi import FastAPI, Response
-
 from data_reader import DataReader
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"]
+)
 
 reader_host = os.environ.get("READER_HOST", "localhost")
 reader_port = os.environ.get("READER_PORT", "8000")
