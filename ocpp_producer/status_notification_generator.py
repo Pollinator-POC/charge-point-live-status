@@ -10,7 +10,7 @@ from freezegun import freeze_time
 from ocpp.v16 import call, call_result
 from ocpp.v16.enums import ChargePointErrorCode, ChargePointStatus
 import pandas as pd
-from pandas import to_datetime
+from pandas import to_datetime, DataFrame
 
 
 class GenerateStatusNotifications:
@@ -45,22 +45,13 @@ class GenerateStatusNotifications:
             "message_id": str(uuid.uuid4()),
             "message_type": 2,
             "body": json.dumps(data),
-            "timestamp": data["timestamp"], # => only for sorting later on (it's actually removed later)
             "write_timestamp": data["timestamp"],
             "write_timestamp_epoch": int(parser.parse(data["timestamp"]).timestamp())
         }
 
-    def generate(self):
-        num_chargers = 10
+    def generate(self, charger_list) -> DataFrame:
         collect = []
-        for n in range(num_chargers):
-           charge_point_id = n + 1
+        for charge_point_id in charger_list:
            collect = collect + [ self.decorate(charge_point_id, x) for x in self.pulse("2023-01-01T09:00:00+00:00", "2023-01-01T18:00:00+00:00") ]
         df = pd.DataFrame(collect)
-        df["timestamp_new"] = to_datetime(df["timestamp"])
-        df.sort_values(by=['timestamp_new'], ascending=True, inplace=True)
-        df.drop(["timestamp_new", "timestamp"], axis=1, inplace=True)
-        now = int(datetime.now(timezone.utc).timestamp())
-        df.to_json(f"./data/{now}.json", orient="records")
-
-GenerateStatusNotifications().generate()
+        return df

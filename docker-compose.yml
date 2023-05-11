@@ -202,7 +202,7 @@ services:
       BOOTSTRAP_SERVERS: "broker:29092"
       DELAY_START_SECONDS: "120"
       MESSAGE_DELAY: "1"
-      DATA_FILE: "data/1683732924.json"
+      DATA_FILE: "data/1683796992.json"
   consumer:
     build: consumer/.
     container_name: consumer
@@ -211,7 +211,7 @@ services:
       BOOTSTRAP_SERVERS: "broker:29092"
       DELAY_START_SECONDS: "180"
       TOPICS_TO_CONSUME: "StatusNotificationRequest,HeartbeatRequest"
-      CONSUMER_GROUP_ID: "status_notification_request_transformer"
+      CONSUMER_GROUP_ID: "live_charger_status_consumer"
       STORAGE_HOST: "storage"
       STORAGE_PORT: "8000"
   storage:
