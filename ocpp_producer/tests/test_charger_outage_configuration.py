@@ -39,6 +39,9 @@ class TestChargerOutageConfiguration:
         assert set(result) == set([1, 2, 3, 4])
         assert len(result) == 4
 
+        result = ChargerOutageConfiguration()._generate_outage_list(input_df=df, network="Alpha", outage_rate=0.0)
+        assert len(result) == 0
+
     def test_generate(self):
         input = [
             {
