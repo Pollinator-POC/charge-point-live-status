@@ -201,8 +201,9 @@ services:
     environment:
       BOOTSTRAP_SERVERS: "broker:29092"
       DELAY_START_SECONDS: "120"
-      MESSAGE_DELAY: "1"
-      DATA_FILE: "data/1683796992.json"
+      OUTAGE_CONFIGURATION_LOCATION: "/usr/src/app/outage_controller/controller.json"
+    volumes:
+      - ./ocpp_producer/outage_controller:/usr/src/app/outage_controller
   consumer:
     build: consumer/.
     container_name: consumer

@@ -13,12 +13,13 @@ class DataReader:
 
     def _unpack(self, data: Dict):
         return {
-            "charge_point_id": data["charge_point_id"]["S"],
-            "event_timestamp": data["event_timestamp"]["S"],
-            "error_code":  data["error_code"]["S"],
-            "status":  data["status"]["S"],
-            "vendor_error_code":  data["vendor_error_code"]["S"],
-            "vendor_id": data["vendor_id"]["S"]
+            "charge_point_id": data.get("charge_point_id", {}).get("S", ""),
+            "status_timestamp": data.get("event_timestamp", {}).get("S", ""),
+            "error_code": data.get("error_code", {}).get("S", ""),
+            "status": data.get("status", {}).get("S", ""),
+            "vendor_error_code": data.get("vendor_error_code", {}).get("S", ""),
+            "vendor_id": data.get("vendor_id", {}).get("S", ""),
+            "last_known_heartbeat_timestamp": data.get("last_known_heartbeat_timestamp", {}).get("S", ""),
         }
 
     def get_all(self, table_name: str) -> Union[Dict, List]:

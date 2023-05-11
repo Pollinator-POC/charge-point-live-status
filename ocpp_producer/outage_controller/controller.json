@@ -1,0 +1,18 @@
+[
+    {
+        "network": "Alpha",
+        "outage_rate": 1.00
+    },
+    {
+        "network": "Beta",
+        "outage_rate": 1.00
+    },
+    {
+        "network": "Delta",
+        "outage_rate": 1.00
+    },
+    {
+        "network": "Gamma",
+        "outage_rate": 1.00
+    }
+]

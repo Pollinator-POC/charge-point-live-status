@@ -13,6 +13,7 @@ class StatusNotificationRequestHandler:
 
     def process(self, payload: str):
         data = json.loads(payload)
+        data["body"] = json.loads(data["body"])
         result = self._extractor(data)
         self.writer.write(result)
         return result
