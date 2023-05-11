@@ -63,7 +63,7 @@ def basic_consume_loop(consumer, topics):
             else:
                 decoded_message = msg.value().decode("utf-8")
                 handler = router.get_handler(decoded_message)
-                handler(decoded_message)
+                handler.process(decoded_message)
     finally:
         # Close down consumer to commit final offsets.
         consumer.close()
