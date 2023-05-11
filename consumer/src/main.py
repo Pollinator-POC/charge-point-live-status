@@ -5,8 +5,12 @@ from confluent_kafka import Consumer, KafkaError, KafkaException
 import os
 import logging
 
-from data_writer import DataWriter
-from transformer import Transformer
+from heartbeat_request_handler import HeartbeatRequestHandler
+from heartbeat_request_writer import HeartbeatRequestWriter
+from status_notification_request_handler import StatusNotificationRequestHandler
+from status_notification_request_writer import StatusNotificationRequestWriter
+from generic_handler import GenericHandler
+from router import Router
 
 delay = os.environ.get("DELAY_START_SECONDS", 240)
 sleep(int(delay))
@@ -24,8 +28,12 @@ dynamodb_client = boto3.client(
     aws_secret_access_key="X"
 )
 
-data_writer = DataWriter(client=dynamodb_client)
-
+heartbeat_request_writer = HeartbeatRequestWriter(client=dynamodb_client)
+status_notification_request_writer = StatusNotificationRequestWriter(client=dynamodb_client)
+heartbeat_request_handler = HeartbeatRequestHandler(writer=heartbeat_request_writer)
+status_notification_request_handler = StatusNotificationRequestHandler(writer=status_notification_request_writer)
+generic_handler = GenericHandler()
+router = Router(heartbeat_request_handler=heartbeat_request_handler, status_notification_request_handler=status_notification_request_handler, generic_handler=generic_handler)
 conf = {
     'bootstrap.servers': os.environ.get("BOOTSTRAP_SERVERS", "localhost:9092"),
     'broker.address.family': 'v4',
@@ -36,8 +44,6 @@ conf = {
 consumer = Consumer(conf)
 
 running = True
-
-transformer = Transformer()
 
 def basic_consume_loop(consumer, topics):
     try:
@@ -56,8 +62,8 @@ def basic_consume_loop(consumer, topics):
                     raise KafkaException(msg.error())
             else:
                 decoded_message = msg.value().decode("utf-8")
-                data = transformer.process(decoded_message)
-                data_writer.write(data)
+                handler = router.get_handler(action=decoded_message["action"], message_type=decoded_message["message_type"])
+                handler(decoded_message)
     finally:
         # Close down consumer to commit final offsets.
         consumer.close()
