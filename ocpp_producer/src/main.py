@@ -76,6 +76,7 @@ while True:
             producer.flush()
 
     except Exception as inst:
+        print(type(inst))
         logging.info("Broker not available.")
         sleep(10)
 

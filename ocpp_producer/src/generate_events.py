@@ -11,12 +11,13 @@ class GenerateEvents:
         self.generate_real_time_events = generate_real_time_events
 
     def generate(self, outage_configuration: list[Union[dict[str, Union[str, float]], dict[str, Union[str, float]]]]) -> List[Dict]:
-        config = self.charge_outage_configuration.generate(
+        config = self.charge_outage_configuration.run(
             outage_configuration=outage_configuration,
             filepath="ChargePointData.csv"
         )
         collect = []
-        for i in config["charge_point_id"].tolist():
+        available_charge_point_ids = config.loc[~config["outage"]]["charge_point_id"].tolist()
+        for i in available_charge_point_ids:
             events = self.generate_real_time_events.generate(i)
             for e in events:
                 message_type = e["message_type"]
