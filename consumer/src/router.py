@@ -1,3 +1,4 @@
+import json
 from typing import Callable
 
 
@@ -13,8 +14,9 @@ class Router:
             "StatusNotification": self.status_notification_request_handler,
         }.get(action, self.generic_handler)
 
-    def get_handler(self, action: str, message_type: str) -> Callable:
-        if message_type == 2:
-            return self._request_handlers(action)
+    def get_handler(self, payload) -> Callable:
+        result = json.loads(payload)
+        if result["message_type"] == 2:
+            return self._request_handlers(result["action"])
         else:
             return self.generic_handler

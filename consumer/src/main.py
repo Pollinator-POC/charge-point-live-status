@@ -62,7 +62,7 @@ def basic_consume_loop(consumer, topics):
                     raise KafkaException(msg.error())
             else:
                 decoded_message = msg.value().decode("utf-8")
-                handler = router.get_handler(action=decoded_message["action"], message_type=decoded_message["message_type"])
+                handler = router.get_handler(decoded_message)
                 handler(decoded_message)
     finally:
         # Close down consumer to commit final offsets.
